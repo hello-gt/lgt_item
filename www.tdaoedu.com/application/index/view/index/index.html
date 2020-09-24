@@ -41,7 +41,7 @@
                         <input type="radio" name="color_name" value="blue" checked />
                         <a>颜色自选</a>
                     </div>
-                    <button id="aab">测试用svg（要测试取色功能请先点这个按钮）</button>
+                    <!-- <button id="aab">测试用svg（要测试取色功能请先点这个按钮）</button> -->
                     <button  id ="btnMakeImage" style="margin: 20px" >开始制作</button>
                     <button  id ="btnSaveImage" style="margin: 20px" >保存照片</button>
                 </div>
@@ -83,7 +83,7 @@
                     <canvas  id="canvas" width="400" height="400" style="border:2px solid gray;position:absolute;"></canvas>
                 </div>
                 <div  id='imageCover' style="width:100px; height:100px;position:absolute;cursor:pointer;display:none;z-index:4;">
-                    <canvas id="watermarkImageCanvas"   width="100" height="100" style="position:absolute;"></canvas>
+                    <canvas id="watermarkImageCanvas" name="file"  width="100" height="100" style="position:absolute;"></canvas>
                 </div>
                 <div  id='textCover' style="width:100px; height:30px;position:absolute;cursor:pointer;z-index:5;display:none">
                     <canvas id="watermarkTextCanvas"   width="100" height="30" style="position:absolute;"></canvas>
@@ -101,19 +101,19 @@
     /**
      * 拾色器
      */
-    require(['colorPicker'], colorPicker=>{
-        let cp=new colorPicker('00ffcc');
-          cp.getColor(fn);
-          cp.setColor('00ff00');
-        document.querySelector('#aab').addEventListener('click',e=>{
-          cp.updateSVG(testSvg());
-        });
+    // require(['colorPicker'], colorPicker=>{
+    //     let cp=new colorPicker('00ffcc');
+    //       cp.getColor(fn);
+    //       cp.setColor('00ff00');
+    //     document.querySelector('#aab').addEventListener('click',e=>{
+    //       cp.updateSVG(testSvg());
+    //     });
 
-    })
+    // })
 
-    function fn(color) {
-        console.log(color);
-    }
+    // function fn(color) {
+    //     console.log(color);
+    // }
 
 
 
@@ -132,7 +132,7 @@
 
         //以图片的形式保存到服务器，后台用CORS
         document.querySelector('#btnSaveImage').addEventListener('click', function(e){
-            sinoImageEditModule.saveImage('http://localhost:8055/Home/SaveImage',function(result)
+            sinoImageEditModule.saveImage('index/index/SaveImage',function(result)
             {
                 if(result.State==1)
                     alert('保存成功,文件名：'+result.FileName);

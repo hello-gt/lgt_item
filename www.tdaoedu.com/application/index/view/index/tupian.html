@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<style type="text/css">
+.item_area {
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+    border: 1px;
+}
+.drop_area {
+    margin: 0 auto;
+}
+</style>
+<script src='/static/index/js/jquery.min.js'></script>
+<script src="/static/index/js/upload.js"></script>
+<body>
+<div class="item_area">
+
+    <h3>可将图片拖拽到下框中</h3>
+    <div id="drop_area"></div>
+    <div>
+        换背景:
+        <input type="radio" name="color_name" value="write" checked />
+        <a>白色</a>
+        <input type="radio" name="color_name" value="red" checked />
+        <a>红色</a>
+        <input type="radio" name="color_name" value="blue" checked />
+        <a>蓝色</a>
+    </div>
+    <button  id ="btnMakeImage" style="margin: 20px" >开始制作</button>
+    <button  id ="btnSaveImage" style="margin: 20px" >保存照片</button>
+
+</div>
+</body>
+<script type="text/javascript">
+    var dragImgUpload = new DragImgUpload("#drop_area",{
+        callback:function (files) {
+            //回调函数，可以传递给后台等等
+            var file = files[0];
+            console.log(file.name);
+            var formData = new FormData(); 
+            formData.append('file', file);  //添加图片信息的参数
+            $.ajax({
+                url: "http://www.tdaoedu.com/index/index/SaveImage",
+                type: 'POST',
+                cache: false, //上传文件不需要缓存
+                data: formData,
+                processData: false, // 告诉jQuery不要去处理发送的数据
+                contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+                success: function (data) {
+                    var rs = eval("("+data+")");
+                    if(rs.state==1){
+                        alert('上传成功！');
+                    }else{
+                        alert(rs.msg);
+                    }
+                },
+                error: function (data) {
+                    alert("上传失败");
+                }
+            });
+
+        }
+    });
+
+</script>
+</html>
