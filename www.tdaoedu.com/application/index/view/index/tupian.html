@@ -24,14 +24,14 @@
     <div id="drop_area"></div>
     <div>
         换背景:
-        <input type="radio" name="color_name" value="write" checked />
+        <input type="radio" name="color_name" value="write" checked/>
         <a>白色</a>
-        <input type="radio" name="color_name" value="red" checked />
+        <input type="radio" name="color_name" value="red"/>
         <a>红色</a>
-        <input type="radio" name="color_name" value="blue" checked />
+        <input type="radio" name="color_name" value="blue"/>
         <a>蓝色</a>
     </div>
-    <button  id ="btnMakeImage" style="margin: 20px" >开始制作</button>
+    <button  onclick=btnMakeImage() style="margin: 20px" >开始制作</button>
     <button  id ="btnSaveImage" style="margin: 20px" >保存照片</button>
 
 </div>
@@ -41,9 +41,11 @@
         callback:function (files) {
             //回调函数，可以传递给后台等等
             var file = files[0];
+            file_name = file.name;
             console.log(file.name);
             var formData = new FormData(); 
             formData.append('file', file);  //添加图片信息的参数
+            formData.append('name', file_name);  //添加图片信息的参数
             $.ajax({
                 url: "http://www.tdaoedu.com/index/index/SaveImage",
                 type: 'POST',
@@ -66,6 +68,38 @@
 
         }
     });
+
+    
+    function btnMakeImage() {
+
+        var color_value = $("input[type='radio']:checked").val();
+
+        // 判断
+        if (color_value == ''  || color_value == null || color_value == undefined) {
+            alert("请选择替换背景颜色");
+            return;
+        }
+
+        file_img_name = 
+
+        // Ajax提交数据
+        $.ajax({
+            url: "http://www.tdaoedu.com/index/index/SaveImage",    // 提交到controller的url路径
+            type: "post",    // 提交方式
+            data: {"color_value": color_value, "file_img_name": file_img_name},  // data为String类型，必须为 Key/Value 格式。
+            dataType: "json",    // 服务器端返回的数据类型
+            success: function (data) {    // 请求成功后的回调函数，其中的参数data为controller返回的map,也就是说,@ResponseBody将返回的map转化为JSON格式的数据，然后通过data这个参数取JSON数据中的值
+                if (data.message == "success") {    
+                    //跳转到系统首页
+//                ......
+                } else {
+ //                   ......
+                }
+            },
+        });
+    }
+
+
 
 </script>
 </html>

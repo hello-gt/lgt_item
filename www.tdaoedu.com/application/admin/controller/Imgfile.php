@@ -10,13 +10,15 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
-use app\admin\model\ArticleModel;
+use app\admin\model\ImgfileModel;
 
 class Imgfile extends Base
 {
     // 文章列表
     public function index()
     {
+
+        echo 11111;die;
         if(request()->isAjax()){
 
             $param = input('param.');
@@ -29,15 +31,15 @@ class Imgfile extends Base
                 $where['title'] = ['like', '%' . $param['searchText'] . '%'];
             }
 
-            $article = new ArticleModel();
-            $selectResult = $article->getArticlesByWhere($where, $offset, $limit);
+            $Imgfile = new ImgfileModel();
+            $selectResult = $Imgfile->getImgfilesByWhere($where, $offset, $limit);
 
             foreach($selectResult as $key=>$vo){
                 $selectResult[$key]['thumbnail'] = '<img src="' . $vo['thumbnail'] . '" width="40px" height="40px">';
                 $selectResult[$key]['operate'] = showOperate($this->makeButton($vo['id']));
             }
 
-            $return['total'] = $article->getAllArticles($where);  // 总数据
+            $return['total'] = $Imgfile->getAllImgfiles($where);  // 总数据
             $return['rows'] = $selectResult;
 
             return json($return);
@@ -47,7 +49,7 @@ class Imgfile extends Base
     }
 
     // 添加文章
-    public function articleAdd()
+    public function ImgfileAdd()
     {
         if(request()->isPost()){
             $param = input('post.');
@@ -55,8 +57,8 @@ class Imgfile extends Base
             unset($param['file']);
             $param['add_time'] = date('Y-m-d H:i:s');
 
-            $article = new ArticleModel();
-            $flag = $article->addArticle($param);
+            $Imgfile = new ImgfileModel();
+            $flag = $Imgfile->addImgfile($param);
 
             return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
@@ -64,31 +66,31 @@ class Imgfile extends Base
         return $this->fetch();
     }
 
-    public function articleEdit()
+    public function ImgfileEdit()
     {
-        $article = new ArticleModel();
+        $Imgfile = new ImgfileModel();
         if(request()->isPost()){
 
             $param = input('post.');
             unset($param['file']);
-            $flag = $article->editArticle($param);
+            $flag = $Imgfile->editImgfile($param);
 
             return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
 
         $id = input('param.id');
         $this->assign([
-            'article' => $article->getOneArticle($id)
+            'Imgfile' => $Imgfile->getOneImgfile($id)
         ]);
         return $this->fetch();
     }
 
-    public function articleDel()
+    public function ImgfileDel()
     {
         $id = input('param.id');
 
-        $article = new ArticleModel();
-        $flag = $article->delArticle($id);
+        $Imgfile = new ImgfileModel();
+        $flag = $Imgfile->delImgfile($id);
         return json(msg($flag['code'], $flag['data'], $flag['msg']));
     }
 
@@ -119,14 +121,14 @@ class Imgfile extends Base
     {
         return [
             '编辑' => [
-                'auth' => 'articles/articleedit',
-                'href' => url('articles/articleedit', ['id' => $id]),
+                'auth' => 'Imgfiles/Imgfileedit',
+                'href' => url('Imgfiles/Imgfileedit', ['id' => $id]),
                 'btnStyle' => 'primary',
                 'icon' => 'fa fa-paste'
             ],
             '删除' => [
-                'auth' => 'articles/articledel',
-                'href' => "javascript:articleDel(" . $id . ")",
+                'auth' => 'Imgfiles/Imgfiledel',
+                'href' => "javascript:ImgfileDel(" . $id . ")",
                 'btnStyle' => 'danger',
                 'icon' => 'fa fa-trash-o'
             ]
